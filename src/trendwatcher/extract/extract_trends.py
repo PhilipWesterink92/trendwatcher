@@ -215,12 +215,18 @@ def load_trend_rows() -> List[dict]:
     if not DOCS_IN.exists():
         return []
     rows = []
+    # Accept multiple source types
+    valid_types = {
+        "google_trends_rising",
+        "reddit_trending",
+        "food_blog_post",
+    }
     for line in DOCS_IN.read_text(encoding="utf-8", errors="ignore").splitlines():
         try:
             obj = json.loads(line)
         except Exception:
             continue
-        if obj.get("type") == "google_trends_rising":
+        if obj.get("type") in valid_types:
             rows.append(obj)
     return rows
 
