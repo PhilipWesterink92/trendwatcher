@@ -37,35 +37,86 @@ FOOD_HINTS = {
     # proteins / dairy
     "chicken", "beef", "pork", "salmon", "tuna", "shrimp", "egg", "eggs",
     "tofu", "yoghurt", "yogurt", "cheese", "milk", "butter", "skyr", "kefir",
+    "tempeh", "seitan", "halloumi", "feta", "mozzarella", "parmesan",
+
+    # plant-based / alternative proteins (trending)
+    "vegan", "plantbased", "plant-based", "veggie", "vegetarian",
+    "jackfruit", "chickpea", "lentil", "lentils", "bean", "beans",
+    "oat milk", "oatmilk", "almond milk", "soy milk", "coconut milk",
 
     # carbs & staples
     "bread", "rice", "pasta", "noodle", "noodles", "potato", "potatoes",
     "wrap", "tortilla", "pizza", "burger", "oats", "granola",
+    "quinoa", "bulgur", "couscous", "farro", "buckwheat", "soba",
 
     # produce
     "avocado", "tomato", "tomatoes", "onion", "onions", "garlic",
     "banana", "bananas", "apple", "apples", "spinach", "broccoli", "lemon",
+    "kale", "arugula", "cauliflower", "zucchini", "mushroom", "mushrooms",
+    "edamame", "bok choy", "ginger", "turmeric", "cilantro", "basil",
 
     # dishes / cuisines
     "soup", "salad", "curry", "stew", "taco", "ramen", "risotto",
     "lasagna", "lasagne", "paella", "dumpling", "dumplings",
+    "poke", "bibimbap", "pad thai", "pho", "bao", "gyoza",
+    "shakshuka", "falafel", "bowl", "bowls",
 
-    # ingredients that trend
+    # fermented & probiotic (trending)
+    "kimchi", "kombucha", "sauerkraut", "pickled", "fermented",
+    "miso", "tempeh", "kefir", "sourdough",
+
+    # asian ingredients (trending)
     "miso", "matcha", "kimchi", "gochujang", "tahini", "hummus",
+    "sriracha", "hoisin", "sesame", "wasabi", "nori", "seaweed",
+    "panko", "mirin", "dashi", "yuzu", "shiso",
+
+    # middle eastern / mediterranean (trending)
+    "tahini", "za'atar", "sumac", "harissa", "dukkah", "labneh",
+    "halloumi", "tzatziki", "hummus", "falafel",
+
+    # health / superfood trends
+    "protein", "collagen", "chia", "acai", "spirulina", "moringa",
+    "turmeric", "ginger", "hemp", "flax", "nutritional yeast",
+    "bone broth", "ghee", "mct", "adaptogens",
+
+    # diet trends
+    "keto", "paleo", "low carb", "gluten free", "gluten-free",
+    "dairy free", "dairy-free", "sugar free", "organic",
 
     # form factors
     "sauce", "broth", "paste", "powder", "mix", "dressing", "marinade", "dip",
+    "spread", "butter", "oil", "vinegar", "seasoning", "spice",
+
+    # cooking methods (signals intent)
+    "roasted", "grilled", "baked", "fried", "steamed", "sauteed",
+    "slow cooker", "instant pot", "air fryer", "sous vide",
 
     # generic food signals (recipes are useful!)
     "recipe", "recipes", "recept", "recepten", "rezept", "rezepte", "recette", "recettes",
+    "meal prep", "snack", "snacks", "appetizer", "dessert",
 }
 
 # Non-food category veto terms (small, stable; avoids "pistachio" cosmetics traps)
 NONFOOD_VETO = {
+    # cosmetics / beauty
     "catrice", "maybelline", "loreal", "l'oréal", "nyx", "sephora",
-    "rolex", "oyster", "perpetual",
-    "nike", "adidas",
-    "iphone", "samsung",
+    "mascara", "lipstick", "eyeshadow", "foundation", "concealer",
+    "skincare", "serum", "moisturizer", "cleanser",
+
+    # luxury watches (avoid "oyster" = food false positive)
+    "rolex", "oyster perpetual", "submariner", "datejust",
+
+    # fashion / apparel
+    "nike", "adidas", "zara", "h&m", "uniqlo",
+    "sneakers", "shoes", "jacket", "jeans", "dress",
+
+    # electronics
+    "iphone", "samsung", "galaxy", "pixel", "macbook",
+    "laptop", "tablet", "headphones", "airpods",
+
+    # health (non-food)
+    "discharge", "infection", "symptom", "medication",
+    "pharmacy", "apotheek", "apotheke", "pharmacie",
 }
 
 # Local/venue intent: pattern-based (no city lists)

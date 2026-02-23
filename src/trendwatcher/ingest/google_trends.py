@@ -1,5 +1,7 @@
 ﻿from __future__ import annotations
 
+import random
+import time
 from datetime import datetime, timezone
 from typing import Dict, List
 
@@ -58,20 +60,55 @@ def fetch_rising_searches(country_code: str) -> List[Dict]:
     settings = SETTINGS_BY_COUNTRY.get(cc, {"hl": "en-US", "tz": 360})
 
     # TrendReq can be flaky (Google blocks/rate limits sometimes).
-    # We'll do a couple tries and *log the error* so you can see what's going on.
+    # We'll do retries with exponential backoff and random delays.
     tries = 3
     last_err = None
 
+    # Rotate between realistic user agents
+    user_agents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15",
+    ]
+
     for attempt in range(1, tries + 1):
         try:
+            # Random delay before each attempt (2-5 seconds)
+            if attempt > 1:
+                delay = random.uniform(2.0, 5.0) * attempt  # Exponential backoff
+                print(f"[dim]google_trends {cc}: waiting {delay:.1f}s before retry {attempt}...[/dim]")
+                time.sleep(delay)
+            else:
+                # Small initial delay to be polite
+                time.sleep(random.uniform(0.5, 1.5))
+
+            # Rotate user agent
+            ua = random.choice(user_agents)
+
             pytrends = TrendReq(
                 hl=settings["hl"],
                 tz=settings["tz"],
-                # Keep it simple; no proxies, no fancy headers.
-                # If Google rate-limits, we’ll see it in the error log now.
+                timeout=(10, 25),  # (connect, read) timeouts
+                retries=2,
+                backoff_factor=0.5,
+                requests_args={
+                    "headers": {
+                        "User-Agent": ua,
+                        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                        "Accept-Language": settings["hl"].split("-")[0] + ",en;q=0.5",
+                        "Accept-Encoding": "gzip, deflate, br",
+                        "DNT": "1",
+                        "Connection": "keep-alive",
+                        "Upgrade-Insecure-Requests": "1",
+                    }
+                }
             )
 
             df = pytrends.trending_searches(pn=pn)
+
+            # Success! Add small delay before returning to avoid rapid-fire requests
+            time.sleep(random.uniform(0.5, 1.0))
 
             now = datetime.now(timezone.utc).isoformat()
             out: List[Dict] = []
@@ -101,6 +138,6 @@ def fetch_rising_searches(country_code: str) -> List[Dict]:
                 f"[yellow]google_trends[/yellow] {cc} attempt {attempt}/{tries} failed: {type(e).__name__}: {e}"
             )
 
-    # After retries, give up but don’t crash the whole pipeline.
+    # After retries, give up but don't crash the whole pipeline.
     print(f"[red]google_trends[/red] {cc} failed after {tries} tries: {last_err}")
     return []

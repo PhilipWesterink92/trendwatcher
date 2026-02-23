@@ -1,13 +1,21 @@
 ﻿from __future__ import annotations
 
 import hashlib
+import random
 import time
 from pathlib import Path
 from typing import Optional, Dict, Any
 
 import requests
 
-DEFAULT_UA = "trendwatcher/0.1 (+https://github.com/)"
+# Realistic browser user agents (rotate to avoid detection)
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+]
 
 
 def _safe_filename(url: str) -> str:
@@ -33,7 +41,22 @@ def fetch_url(
     meta_path = Path(cache_dir) / f"{key}.meta"
     body_path = Path(cache_dir) / f"{key}.txt"
 
-    headers = {"User-Agent": DEFAULT_UA}
+    # Realistic browser headers to avoid 403 blocks
+    user_agent = random.choice(USER_AGENTS)
+    headers = {
+        "User-Agent": user_agent,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9,nl;q=0.8,de;q=0.7",
+        "Accept-Encoding": "gzip, deflate, br",
+        "DNT": "1",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Cache-Control": "max-age=0",
+    }
 
     if meta_path.exists():
         meta_lines = meta_path.read_text(encoding="utf-8", errors="ignore").splitlines()
@@ -48,10 +71,23 @@ def fetch_url(
         if "last_modified" in meta_map:
             headers["If-Modified-Since"] = meta_map["last_modified"]
 
-    time.sleep(min_delay_s)
+    # Random delay (1-3 seconds) to avoid rate limiting
+    delay = random.uniform(1.0, 3.0) if min_delay_s > 0 else min_delay_s
+    time.sleep(delay)
 
     try:
-        resp = requests.get(url, headers=headers, timeout=timeout_s)
+        # Add referer from same domain to look more legitimate
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}/"
+
+        resp = requests.get(
+            url,
+            headers=headers,
+            timeout=timeout_s,
+            allow_redirects=True,
+            verify=True,
+        )
     except Exception as e:
         return {
             "type": "competitor_new",
