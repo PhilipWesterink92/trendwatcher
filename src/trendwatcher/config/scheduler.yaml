@@ -1,0 +1,89 @@
+# ========================================
+# Trendwatcher Scheduler Configuration
+# ========================================
+#
+# Configure automated jobs using cron expressions.
+# Cron format: "minute hour day month day_of_week"
+# Examples:
+#   "0 2 * * *"    - Daily at 2:00 AM UTC
+#   "0 3 * * 0"    - Weekly on Sunday at 3:00 AM UTC
+#   "*/15 * * * *" - Every 15 minutes
+#
+# Test cron expressions: https://crontab.guru/
+
+schedule:
+  # ====================================
+  # Ingest: Fetch data from all sources
+  # ====================================
+  ingest:
+    enabled: true
+    cron: "0 2 * * *"  # Daily at 2:00 AM UTC
+    # Fetches Google Trends, competitor pages, Reddit posts, and food blogs
+
+  # ====================================
+  # Extract: Cluster and score trends
+  # ====================================
+  extract:
+    enabled: true
+    cron: "0 3 * * *"  # Daily at 3:00 AM UTC (after ingest)
+    # Processes raw documents into clustered trends
+
+  # ====================================
+  # Analyze: AI-powered trend analysis
+  # ====================================
+  analyze:
+    enabled: true
+    cron: "0 4 * * 0"  # Weekly on Sunday at 4:00 AM UTC
+    top_n: 25          # Analyze top 25 trends
+    # Uses Claude AI to evaluate product fit and market readiness
+
+  # ====================================
+  # Report: Send Slack notifications
+  # ====================================
+  report:
+    enabled: false  # Set to true after configuring Slack
+    cron: "0 9 * * 1"  # Weekly on Monday at 9:00 AM UTC
+    channel: "#trendwatcher"
+    # Sends weekly trend report to Slack channel
+
+# ====================================
+# Recommended Schedules
+# ====================================
+#
+# Conservative (minimize API costs):
+#   - ingest: Daily at 2 AM
+#   - extract: Daily at 3 AM
+#   - analyze: Weekly on Sunday (Claude API cost)
+#   - report: Weekly on Monday morning
+#
+# Aggressive (faster insights):
+#   - ingest: Every 6 hours
+#   - extract: Every 6 hours
+#   - analyze: Daily
+#   - report: Daily or every 12 hours
+#
+# Development/Testing:
+#   - ingest: "*/30 * * * *" (every 30 minutes)
+#   - extract: "*/35 * * * *" (every 35 minutes, 5 min after ingest)
+#   - analyze: Disabled (run manually to control costs)
+#   - report: Disabled
+
+# ====================================
+# Production Deployment Notes
+# ====================================
+#
+# Linux/systemd:
+#   1. Create /etc/systemd/system/trendwatcher.service
+#   2. ExecStart=/path/to/python -m trendwatcher daemon
+#   3. sudo systemctl enable trendwatcher
+#   4. sudo systemctl start trendwatcher
+#
+# Docker:
+#   1. Use CMD ["python", "-m", "trendwatcher", "daemon"]
+#   2. Mount config and data directories as volumes
+#   3. Set restart: unless-stopped in docker-compose.yml
+#
+# Monitoring:
+#   - Logs written to: data/logs/scheduler.log
+#   - Check job status: tail -f data/logs/scheduler.log
+#   - Monitor for errors and failed jobs

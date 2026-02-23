@@ -1,0 +1,212 @@
+[
+  {
+    "product_id": "10001",
+    "name": "Organic Matcha Powder",
+    "category": "Tea & Coffee",
+    "tags": ["matcha", "green tea", "organic", "japanese", "antioxidants"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10002",
+    "name": "Kimchi Traditional",
+    "category": "Condiments & Fermented Foods",
+    "tags": ["kimchi", "korean", "fermented", "probiotic", "spicy"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10003",
+    "name": "Oat Milk Barista Edition",
+    "category": "Plant-Based Dairy",
+    "tags": ["oat milk", "vegan", "plant-based", "dairy-free", "barista"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10004",
+    "name": "Avocado Oil Extra Virgin",
+    "category": "Oils & Vinegars",
+    "tags": ["avocado oil", "healthy fats", "cooking oil", "high heat"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10005",
+    "name": "Chickpea Pasta Fusilli",
+    "category": "Pasta & Grains",
+    "tags": ["chickpea", "legume pasta", "gluten-free", "high protein", "pasta"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10006",
+    "name": "Kombucha Ginger Lemon",
+    "category": "Beverages",
+    "tags": ["kombucha", "fermented", "probiotic", "ginger", "lemon"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10007",
+    "name": "Tahini Sesame Paste",
+    "category": "Condiments & Spreads",
+    "tags": ["tahini", "sesame", "middle eastern", "hummus", "spread"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10008",
+    "name": "Tempeh Original",
+    "category": "Plant-Based Protein",
+    "tags": ["tempeh", "soy", "vegan", "protein", "indonesian", "fermented"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10009",
+    "name": "Coconut Yogurt Plain",
+    "category": "Plant-Based Dairy",
+    "tags": ["coconut", "yogurt", "vegan", "dairy-free", "probiotic"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10010",
+    "name": "Miso Paste White",
+    "category": "Condiments & Fermented Foods",
+    "tags": ["miso", "japanese", "fermented", "umami", "soy"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10011",
+    "name": "Almond Butter Smooth",
+    "category": "Nut Butters",
+    "tags": ["almond", "nut butter", "protein", "spread", "healthy fats"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10012",
+    "name": "Quinoa Tricolor Mix",
+    "category": "Pasta & Grains",
+    "tags": ["quinoa", "gluten-free", "protein", "superfood", "grain"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10013",
+    "name": "Soba Noodles Buckwheat",
+    "category": "Pasta & Noodles",
+    "tags": ["soba", "buckwheat", "japanese", "noodles", "healthy"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10014",
+    "name": "Acai Berry Puree Frozen",
+    "category": "Frozen Fruits",
+    "tags": ["acai", "berries", "superfood", "smoothie", "antioxidants"],
+    "available_in": ["NL", "FR"]
+  },
+  {
+    "product_id": "10015",
+    "name": "Ghee Clarified Butter",
+    "category": "Oils & Fats",
+    "tags": ["ghee", "butter", "indian", "lactose-free", "cooking fat"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10016",
+    "name": "Nutritional Yeast Flakes",
+    "category": "Baking & Cooking",
+    "tags": ["nutritional yeast", "vegan", "cheese flavor", "vitamin b12"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10017",
+    "name": "Gochujang Korean Chili Paste",
+    "category": "Condiments & Sauces",
+    "tags": ["gochujang", "korean", "chili paste", "spicy", "fermented"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10018",
+    "name": "Jackfruit Young in Brine",
+    "category": "Canned Vegetables",
+    "tags": ["jackfruit", "vegan", "meat substitute", "asian", "plant-based"],
+    "available_in": ["NL"]
+  },
+  {
+    "product_id": "10019",
+    "name": "Harissa Spice Paste",
+    "category": "Condiments & Spices",
+    "tags": ["harissa", "north african", "spicy", "chili", "moroccan"],
+    "available_in": ["FR", "NL"]
+  },
+  {
+    "product_id": "10020",
+    "name": "Cauliflower Rice Frozen",
+    "category": "Frozen Vegetables",
+    "tags": ["cauliflower", "rice substitute", "low-carb", "keto", "vegetables"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10021",
+    "name": "Spirulina Powder Organic",
+    "category": "Superfoods",
+    "tags": ["spirulina", "algae", "superfood", "protein", "supplements"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10022",
+    "name": "Cashew Cheese Spread",
+    "category": "Plant-Based Cheese",
+    "tags": ["cashew", "vegan cheese", "dairy-free", "spread", "plant-based"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10023",
+    "name": "Edamame Frozen Pods",
+    "category": "Frozen Vegetables",
+    "tags": ["edamame", "soy", "japanese", "protein", "snack"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10024",
+    "name": "Chia Seeds Black",
+    "category": "Seeds & Nuts",
+    "tags": ["chia", "seeds", "omega-3", "fiber", "superfood"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10025",
+    "name": "Kefir Plain Organic",
+    "category": "Dairy",
+    "tags": ["kefir", "probiotic", "fermented", "yogurt drink", "organic"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10026",
+    "name": "Seaweed Snacks Roasted",
+    "category": "Snacks",
+    "tags": ["seaweed", "nori", "asian", "healthy snack", "umami"],
+    "available_in": ["NL", "DE"]
+  },
+  {
+    "product_id": "10027",
+    "name": "Pea Protein Powder Unflavored",
+    "category": "Supplements",
+    "tags": ["pea protein", "vegan", "protein powder", "plant-based", "fitness"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10028",
+    "name": "Turmeric Golden Milk Mix",
+    "category": "Beverages",
+    "tags": ["turmeric", "golden milk", "latte", "anti-inflammatory", "spices"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10029",
+    "name": "Smoked Paprika Spanish",
+    "category": "Spices",
+    "tags": ["paprika", "smoked", "spanish", "spice", "cooking"],
+    "available_in": ["NL", "DE", "FR"]
+  },
+  {
+    "product_id": "10030",
+    "name": "Rice Paper Vietnamese",
+    "category": "Asian Ingredients",
+    "tags": ["rice paper", "vietnamese", "spring rolls", "gluten-free", "wraps"],
+    "available_in": ["NL", "DE"]
+  }
+]

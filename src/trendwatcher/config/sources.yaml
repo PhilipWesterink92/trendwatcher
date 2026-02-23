@@ -1,0 +1,118 @@
+﻿sources:
+  - id: google_trends_nl
+    type: google_trends
+    country: NL
+    enabled: true
+
+  - id: google_trends_de
+    type: google_trends
+    country: DE
+    enabled: true
+
+  - id: google_trends_fr
+    type: google_trends
+    country: FR
+    enabled: true
+
+  - id: google_trends_us
+    type: google_trends
+    country: US
+    enabled: true
+
+  - id: google_trends_uk
+    type: google_trends
+    country: GB
+    enabled: true
+
+  - id: google_trends_kr
+    type: google_trends
+    country: KR
+    enabled: true
+
+  - id: google_trends_jp
+    type: google_trends
+    country: JP
+    enabled: true
+
+  - id: google_trends_au
+    type: google_trends
+    country: AU
+    enabled: true
+
+  - id: google_trends_CA
+    type: google_trends
+    country: CA
+    enabled: true
+
+  - id: google_trends_SG
+    type: google_trends
+    country: SG
+    enabled: true
+
+  - id: ah_new_nl
+    type: competitor_new
+    country: NL
+    url: https://www.ah.nl/nieuw
+    enabled: true
+
+  - id: rewe_neu_de
+    type: competitor_new
+    country: DE
+    url: https://www.rewe.de/angebote/neu-im-sortiment/
+    enabled: true
+
+  - id: carrefour_nouveautes_fr
+    type: competitor_new
+    country: FR
+    url: https://www.carrefour.fr/selection/nouveautes
+    enabled: true
+
+  # ====================================
+  # Feature 2: Reddit Data Sources
+  # ====================================
+
+  - id: reddit_food_us
+    type: reddit
+    subreddits: ["food", "FoodPorn", "52weeksofcooking", "EatCheapAndHealthy"]
+    country: US
+    limit: 50
+    time_filter: week
+    enabled: false  # Set to true after configuring Reddit API credentials
+
+  - id: reddit_food_uk
+    type: reddit
+    subreddits: ["food", "UKFood", "recipes"]
+    country: GB
+    limit: 50
+    time_filter: week
+    enabled: false
+
+  # ====================================
+  # Feature 2: Food Blog Data Sources
+  # ====================================
+
+  - id: food_blogs_us
+    type: food_blog
+    feeds:
+      - name: serious_eats
+        url: https://www.seriouseats.com/feeds/latest
+      - name: bon_appetit
+        url: https://www.bonappetit.com/feed/rss
+      - name: budget_bytes
+        url: https://www.budgetbytes.com/feed/
+      - name: minimalist_baker
+        url: https://minimalistbaker.com/feed/
+    country: US
+    max_age_days: 30
+    enabled: true
+
+  - id: food_blogs_uk
+    type: food_blog
+    feeds:
+      - name: bbc_good_food
+        url: https://www.bbcgoodfood.com/rss
+      - name: delicious_magazine
+        url: https://www.deliciousmagazine.co.uk/feed/
+    country: GB
+    max_age_days: 30
+    enabled: true
