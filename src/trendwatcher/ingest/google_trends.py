@@ -90,8 +90,6 @@ def fetch_rising_searches(country_code: str) -> List[Dict]:
                 hl=settings["hl"],
                 tz=settings["tz"],
                 timeout=(10, 25),  # (connect, read) timeouts
-                retries=2,
-                backoff_factor=0.5,
                 requests_args={
                     "headers": {
                         "User-Agent": ua,
