@@ -10,7 +10,7 @@ from rich.table import Table
 from dotenv import load_dotenv
 
 from trendwatcher.ingest.fetch import fetch_url
-from trendwatcher.ingest.google_trends import fetch_rising_searches
+from trendwatcher.ingest.google_trends_v2 import fetch_rising_searches  # Using v2 (works around 404)
 from trendwatcher.ingest.reddit import fetch_reddit_posts
 from trendwatcher.ingest.food_blogs import fetch_food_blogs
 from trendwatcher.extract.extract_trends import run_extract
