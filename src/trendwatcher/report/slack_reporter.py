@@ -64,13 +64,13 @@ def send_slack_report(
         )
 
         if response["ok"]:
-            print(f"✓ Slack report sent to {channel}")
+            print(f"[OK] Slack report sent to {channel}")
             return True
         else:
             raise SlackApiError(f"Slack API returned ok=False", response)
 
     except SlackApiError as e:
-        print(f"✗ Slack error: {e.response['error']}")
+        print(f"[ERROR] Slack error: {e.response['error']}")
         raise
 
 
@@ -105,5 +105,5 @@ def send_slack_message(
         )
         return response["ok"]
     except SlackApiError as e:
-        print(f"✗ Slack error: {e.response['error']}")
+        print(f"[ERROR] Slack error: {e.response['error']}")
         raise

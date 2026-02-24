@@ -2,52 +2,52 @@
   - id: google_trends_nl
     type: google_trends
     country: NL
-    enabled: true
+    enabled: false
 
   - id: google_trends_de
     type: google_trends
     country: DE
-    enabled: true
+    enabled: false
 
   - id: google_trends_fr
     type: google_trends
     country: FR
-    enabled: true
+    enabled: false
 
   - id: google_trends_us
     type: google_trends
     country: US
-    enabled: true
+    enabled: false
 
   - id: google_trends_uk
     type: google_trends
     country: GB
-    enabled: true
+    enabled: false
 
   - id: google_trends_kr
     type: google_trends
     country: KR
-    enabled: true
+    enabled: false
 
   - id: google_trends_jp
     type: google_trends
     country: JP
-    enabled: true
+    enabled: false
 
   - id: google_trends_au
     type: google_trends
     country: AU
-    enabled: true
+    enabled: false
 
   - id: google_trends_CA
     type: google_trends
     country: CA
-    enabled: true
+    enabled: false
 
   - id: google_trends_SG
     type: google_trends
     country: SG
-    enabled: true
+    enabled: false
 
   - id: ah_new_nl
     type: competitor_new

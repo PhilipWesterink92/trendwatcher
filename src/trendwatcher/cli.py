@@ -270,7 +270,7 @@ def report(
                 channel=os.getenv("SLACK_CHANNEL", "#trendwatcher"),
                 top_n=top,
             )
-            print(f"[green]✓ Slack report sent[/green]")
+            print(f"[green][OK] Slack report sent[/green]")
         except Exception as e:
             print(f"[red]Slack report failed:[/red] {e}")
             raise typer.Exit(1)

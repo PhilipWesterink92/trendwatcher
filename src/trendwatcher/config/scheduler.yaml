@@ -41,9 +41,9 @@ schedule:
   # Report: Send Slack notifications
   # ====================================
   report:
-    enabled: false  # Set to true after configuring Slack
+    enabled: true  # Slack configured and ready!
     cron: "0 9 * * 1"  # Weekly on Monday at 9:00 AM UTC
-    channel: "#trendwatcher"
+    channel: "#food-trendwatcher"
     # Sends weekly trend report to Slack channel
 
 # ====================================

@@ -73,9 +73,10 @@ def fetch_trending_keywords(
         batch = keywords[i:i + batch_size]
 
         try:
-            # Small delay to be polite
+            # Longer delays to avoid rate limiting (429 errors)
             if i > 0:
-                time.sleep(random.uniform(1.0, 2.0))
+                delay = random.uniform(3.0, 6.0)  # Increased from 1-2 to 3-6 seconds
+                time.sleep(delay)
 
             pytrends = TrendReq(hl='en-US', tz=360)
             pytrends.build_payload(batch, timeframe=timeframe, geo=cc)
