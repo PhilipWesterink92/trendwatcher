@@ -53,7 +53,13 @@ def ingest():
             # --- Google Trends ---
             if stype == "google_trends":
                 country = s.get("country")
-                rows = fetch_rising_searches(country)
+                keywords = s.get("keywords", [])
+
+                if not keywords:
+                    print(f"[yellow]{s['id']}[/yellow] no keywords configured, skipping")
+                    continue
+
+                rows = fetch_rising_searches(country, keywords=keywords)
 
                 for r in rows:
                     f.write(json.dumps(r, ensure_ascii=False) + "\n")
@@ -111,6 +117,54 @@ def ingest():
                     print(f"[red]{s['id']} failed:[/red] {e}")
                 continue
 
+            # --- Menu sources: Resy ---
+            if stype == "menu_resy":
+                try:
+                    from trendwatcher.ingest.sources.menu import ResyMenuSource
+
+                    source = ResyMenuSource(
+                        source_id=s["id"],
+                        country=s.get("country", "US"),
+                    )
+
+                    rows = source.fetch_dishes(
+                        city=s.get("city", "ny"),
+                        limit=s.get("limit", 50),
+                    )
+
+                    for r in rows:
+                        f.write(json.dumps(r, ensure_ascii=False) + "\n")
+                        total_written += 1
+
+                    print(f"[cyan]{s['id']}[/cyan] menu dishes={len(rows)}")
+                except Exception as e:
+                    print(f"[red]{s['id']} failed:[/red] {e}")
+                continue
+
+            # --- Menu sources: TheFork ---
+            if stype == "menu_thefork":
+                try:
+                    from trendwatcher.ingest.sources.menu import TheForkMenuSource
+
+                    source = TheForkMenuSource(
+                        source_id=s["id"],
+                        country=s.get("country", "FR"),
+                    )
+
+                    rows = source.fetch_dishes(
+                        city=s.get("city", "Paris"),
+                        limit=s.get("limit", 50),
+                    )
+
+                    for r in rows:
+                        f.write(json.dumps(r, ensure_ascii=False) + "\n")
+                        total_written += 1
+
+                    print(f"[cyan]{s['id']}[/cyan] menu dishes={len(rows)}")
+                except Exception as e:
+                    print(f"[red]{s['id']} failed:[/red] {e}")
+                continue
+
     print(f"[green]ingest complete[/green] wrote={total_written} output={DOCS_OUT}")
 
 
@@ -123,6 +177,38 @@ def extract():
     """Cluster and score food trends."""
     rows, clusters = run_extract()
     print(f"[green]extract complete[/green] rows={rows} clusters={clusters} out={TRENDS_OUT}")
+
+
+# =========================
+# SNAPSHOT (Phase 5)
+# =========================
+
+@app.command()
+def snapshot(week: str = None):
+    """Save weekly snapshot of trends to history."""
+    from trendwatcher.store import HistoryStore
+
+    store = HistoryStore()
+    store.snapshot(week=week)
+
+
+# =========================
+# WEEKLY REPORT (Phase 6)
+# =========================
+
+@app.command()
+def weekly_report(
+    output: Path = Path("reports/week_latest.md"),
+    week: str = None,
+):
+    """Generate weekly Markdown report."""
+    from trendwatcher.report.markdown_reporter import generate_weekly_report
+
+    generate_weekly_report(
+        trends_file=TRENDS_OUT,
+        output_file=output,
+        week=week,
+    )
 
 
 # =========================

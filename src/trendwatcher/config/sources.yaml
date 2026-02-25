@@ -1,53 +1,221 @@
-﻿sources:
-  - id: google_trends_nl
-    type: google_trends
-    country: NL
-    enabled: false
+﻿# ====================================
+# Google Trends - Multi-Market Intelligence
+# ====================================
 
-  - id: google_trends_de
-    type: google_trends
-    country: DE
-    enabled: false
+# Incubator Markets (trend originators)
 
-  - id: google_trends_fr
-    type: google_trends
-    country: FR
-    enabled: false
-
-  - id: google_trends_us
-    type: google_trends
-    country: US
-    enabled: false
-
-  - id: google_trends_uk
-    type: google_trends
-    country: GB
-    enabled: false
-
+sources:
   - id: google_trends_kr
     type: google_trends
     country: KR
-    enabled: false
+    enabled: true
+    keywords:
+      # Korean cuisine going global
+      - kimchi
+      - gochujang
+      - gochugaru
+      - korean bbq
+      - tteokbokki
+      - bibimbap
+      - banchan
+      - soju
+      # K-food trends
+      - korean fried chicken
+      - corn dogs
+      - honey butter
+      - korean convenience store
+      - ramyeon
+      - kimbap
 
   - id: google_trends_jp
     type: google_trends
     country: JP
-    enabled: false
+    enabled: true
+    keywords:
+      # Japanese ingredients
+      - matcha
+      - yuzu
+      - miso
+      - umami
+      - dashi
+      - mirin
+      - shiso
+      - ponzu
+      # Japanese trends
+      - japanese mayo
+      - kewpie
+      - japanese curry
+      - onigiri
+      - japanese cheesecake
+      - fluffy pancakes
+      - japanese whisky
+      - sake
 
-  - id: google_trends_au
+  - id: google_trends_cn
     type: google_trends
-    country: AU
-    enabled: false
+    country: CN
+    enabled: true
+    keywords:
+      # Chinese cuisine elements
+      - sichuan pepper
+      - chili crisp
+      - black garlic
+      - tea eggs
+      - dim sum
+      - hot pot
+      - mapo tofu
+      # Trending formats
+      - bubble tea
+      - baijiu
+      - chinese bbq
+      - chinese five spice
+      - doubanjiang
 
-  - id: google_trends_CA
+  - id: google_trends_us
     type: google_trends
-    country: CA
-    enabled: false
+    country: US
+    enabled: true
+    keywords:
+      # US-led trends
+      - air fryer
+      - protein powder
+      - protein bars
+      - cold brew
+      - oat milk
+      - almond milk
+      # Viral US trends
+      - dubai chocolate
+      - sleepy girl mocktail
+      - cottage cheese ice cream
+      - cucumber salad
+      - internal shower drink
+      # Equipment trends
+      - instant pot
+      - sous vide
+      - meal prep containers
+      # Diet trends
+      - keto
+      - paleo
+      - gluten free
 
-  - id: google_trends_SG
+  - id: google_trends_uk
     type: google_trends
-    country: SG
-    enabled: false
+    country: GB
+    enabled: true
+    keywords:
+      # UK food culture
+      - meal deal
+      - jacket potato
+      - fish and chips
+      - sunday roast
+      - afternoon tea
+      # UK-led trends
+      - pink sauce
+      - biscoff
+      - marmite
+      - clotted cream
+      # Health trends
+      - vegan sausage rolls
+      - plant based meat
+      - oat milk
+
+  - id: google_trends_dk
+    type: google_trends
+    country: DK
+    enabled: true
+    keywords:
+      # Copenhagen/Nordic cuisine
+      - new nordic
+      - fermented
+      - rye bread
+      - smoked fish
+      - aquavit
+      - danish pastry
+      - hygge
+      # Nordic ingredients
+      - lingonberry
+      - cloudberry
+      - sea buckthorn
+      - wild mushrooms
+
+# Target Markets (Picnic core regions)
+
+  - id: google_trends_nl
+    type: google_trends
+    country: NL
+    enabled: true
+    keywords:
+      # Dutch staples
+      - stroopwafel
+      - bitterballen
+      - hagelslag
+      - poffertjes
+      - oliebollen
+      # Trending in NL
+      - vegan
+      - plantaardig
+      - biologisch
+      - premium cheese
+      - specialty cheese
+      # International trends hitting NL
+      - korean bbq
+      - poke bowl
+      - ramen
+      - bubble tea
+      - matcha
+      - gochujang
+
+  - id: google_trends_de
+    type: google_trends
+    country: DE
+    enabled: true
+    keywords:
+      # German classics
+      - bratwurst
+      - sauerkraut
+      - pretzel
+      - schnitzel
+      # Trending in DE
+      - vegan
+      - bio
+      - regional
+      - craft beer
+      # International adoption
+      - kimchi
+      - matcha
+      - sriracha
+      - chili oil
+      - poke bowl
+
+  - id: google_trends_fr
+    type: google_trends
+    country: FR
+    enabled: true
+    keywords:
+      # French staples
+      - fromage
+      - baguette
+      - croissant
+      - foie gras
+      - confit
+      # Trending in FR
+      - bio
+      - vegan
+      - sans gluten
+      # Premium cheese trends
+      - scamorza
+      - burrata
+      - stracciatella
+      - truffle
+      # Asian fusion in Paris
+      - ramen
+      - bao
+      - korean fried chicken
+
+
+# ====================================
+# Competitor Data Sources
+# ====================================
 
   - id: ah_new_nl
     type: competitor_new
@@ -116,3 +284,42 @@
     country: GB
     max_age_days: 30
     enabled: true
+
+# ====================================
+# Menu & Restaurant Tracking (Phase 2)
+# ====================================
+
+  - id: menu_resy_nyc
+    type: menu_resy
+    city: ny
+    country: US
+    limit: 50
+    enabled: false  # Enable after testing
+
+  - id: menu_resy_la
+    type: menu_resy
+    city: la
+    country: US
+    limit: 50
+    enabled: false
+
+  - id: menu_thefork_paris
+    type: menu_thefork
+    city: Paris
+    country: FR
+    limit: 50
+    enabled: false
+
+  - id: menu_thefork_amsterdam
+    type: menu_thefork
+    city: Amsterdam
+    country: NL
+    limit: 50
+    enabled: false
+
+  - id: menu_thefork_berlin
+    type: menu_thefork
+    city: Berlin
+    country: DE
+    limit: 50
+    enabled: false

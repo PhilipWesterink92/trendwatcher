@@ -38,6 +38,14 @@ schedule:
     # Uses Claude AI to evaluate product fit and market readiness
 
   # ====================================
+  # Snapshot: Save weekly history (Phase 5)
+  # ====================================
+  snapshot:
+    enabled: true
+    cron: "0 7 * * 1"  # Weekly on Monday at 7:00 AM UTC
+    # Saves weekly trend snapshot for WoW velocity tracking
+
+  # ====================================
   # Report: Send Slack notifications
   # ====================================
   report:

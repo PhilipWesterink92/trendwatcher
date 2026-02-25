@@ -52,7 +52,7 @@ def start_daemon(config_path: Path):
     # Initialize scheduler
     scheduler = BlockingScheduler(timezone="UTC")
 
-    rprint("[cyan]🤖 Starting trendwatcher scheduler daemon[/cyan]")
+    rprint("[cyan][DAEMON] Starting trendwatcher scheduler daemon[/cyan]")
     rprint("[dim]Press Ctrl+C to stop[/dim]\n")
 
     # Add jobs based on configuration
@@ -74,7 +74,7 @@ def start_daemon(config_path: Path):
                 name="Ingest data sources",
                 misfire_grace_time=300,  # 5 minutes
             )
-            rprint(f"[green]✓ Scheduled ingest job:[/green] {cron}")
+            rprint(f"[green][OK] Scheduled ingest job:[/green] {cron}")
             jobs_added += 1
 
     # Extract job
@@ -90,7 +90,7 @@ def start_daemon(config_path: Path):
                 name="Extract and cluster trends",
                 misfire_grace_time=300,
             )
-            rprint(f"[green]✓ Scheduled extract job:[/green] {cron}")
+            rprint(f"[green][OK] Scheduled extract job:[/green] {cron}")
             jobs_added += 1
 
     # Analyze job
@@ -111,7 +111,7 @@ def start_daemon(config_path: Path):
                 name="Analyze trends with AI",
                 misfire_grace_time=600,  # 10 minutes
             )
-            rprint(f"[green]✓ Scheduled analyze job:[/green] {cron} (top {top_n})")
+            rprint(f"[green][OK] Scheduled analyze job:[/green] {cron} (top {top_n})")
             jobs_added += 1
 
     # Report job (Slack)
@@ -133,11 +133,11 @@ def start_daemon(config_path: Path):
                 name="Send Slack report",
                 misfire_grace_time=300,
             )
-            rprint(f"[green]✓ Scheduled Slack report:[/green] {cron} → {channel}")
+            rprint(f"[green][OK] Scheduled Slack report:[/green] {cron} -> {channel}")
             jobs_added += 1
 
     if jobs_added == 0:
-        rprint("[yellow]⚠ No jobs configured. Check scheduler.yaml[/yellow]")
+        rprint("[yellow][WARNING] No jobs configured. Check scheduler.yaml[/yellow]")
         sys.exit(1)
 
     rprint(f"\n[cyan]Running {jobs_added} scheduled jobs...[/cyan]\n")

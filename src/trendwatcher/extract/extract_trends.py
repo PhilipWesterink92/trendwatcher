@@ -10,6 +10,8 @@ from typing import Dict, List, Tuple
 from rapidfuzz import fuzz
 from rapidfuzz.process import extract as rf_extract
 
+from .entity_extractor import extract_entities, should_skip_generic
+
 
 DOCS_IN = Path("data/raw/docs.jsonl")
 TRENDS_OUT = Path("data/processed/trends.json")
@@ -220,6 +222,7 @@ def load_trend_rows() -> List[dict]:
         "google_trends_rising",
         "reddit_trending",
         "food_blog_post",
+        "menu_dish",  # Phase 2: Menu/restaurant tracking
     }
     for line in DOCS_IN.read_text(encoding="utf-8", errors="ignore").splitlines():
         try:
@@ -233,25 +236,49 @@ def load_trend_rows() -> List[dict]:
 
 def cluster_queries(rows: List[dict], threshold: int = 88) -> List[TrendCluster]:
     """
-    Cheap clustering:
-    - group by fuzzy match to existing labels
+    Entity-aware clustering:
+    - Extract specific entities from queries
+    - Group by fuzzy match to existing labels
+    - Skip overly generic queries
     """
     agg: Dict[str, List[dict]] = defaultdict(list)
+    entity_mapping: Dict[str, str] = {}  # query -> entity name
+
     for r in rows:
         q = normalize(str(r.get("query", "")))
         if not q:
             continue
 
-        # strip super common fluff words (soft)
-        for w in SOFT_STOPWORDS:
-            q = q.replace(f" {w} ", " ")
-
-        q = normalize(q)
-
-        if not q or not is_foody(q):
+        # Skip overly generic single-word queries
+        if should_skip_generic(q):
             continue
 
-        agg[q].append(r)
+        # Extract entities (specific products/ingredients)
+        entities = extract_entities(q)
+
+        if entities:
+            # Use the highest-confidence entity as the label
+            best_entity = max(entities, key=lambda e: e.confidence)
+            entity_name = normalize(best_entity.name)
+
+            # Store entity metadata in row
+            r["entity_name"] = best_entity.name
+            r["entity_type"] = best_entity.type
+            r["entity_confidence"] = best_entity.confidence
+
+            agg[entity_name].append(r)
+            entity_mapping[q] = entity_name
+        else:
+            # Fallback: use normalized query (with soft stopword removal)
+            for w in SOFT_STOPWORDS:
+                q = q.replace(f" {w} ", " ")
+
+            q = normalize(q)
+
+            if not q or not is_foody(q):
+                continue
+
+            agg[q].append(r)
 
     unique = list(agg.keys())
     clusters: List[Tuple[str, List[str]]] = []
@@ -319,11 +346,19 @@ def cluster_queries(rows: List[dict], threshold: int = 88) -> List[TrendCluster]
 
 
 def export_clusters(clusters: List[TrendCluster], top_n: int = 50):
+    from trendwatcher.score import TrendScorer
+    from trendwatcher.store import HistoryStore
+
     TRENDS_OUT.parent.mkdir(parents=True, exist_ok=True)
 
     payload = []
+    scorer = TrendScorer()
 
-    for c in clusters[:top_n]:
+    # Load historical data for velocity scoring
+    store = HistoryStore()
+    history_map = store.load_all_histories()
+
+    for c in clusters:
         q_counts = Counter([normalize(r.get("query", "")) for r in c.queries])
         examples = [q for q, _ in q_counts.most_common(8)]
 
@@ -358,23 +393,37 @@ def export_clusters(clusters: List[TrendCluster], top_n: int = 50):
             "has_target": target_first is not None,
         }
 
-        payload.append(
-            {
-                "trend": c.label,
-                "score": round(c.score, 2),
-                "countries": c.countries,
-                "country_order": country_order,
-                "first_seen": first_seen,
-                "lead_lag": lead_lag,
-                "seed_count": len(c.seeds),
-                "seeds": c.seeds[:10],
-                "examples": examples,
-                "raw_count": len(c.queries),
-            }
-        )
+        # Collect entity metadata (if available)
+        entity_types = [r.get("entity_type") for r in c.queries if r.get("entity_type")]
+        entity_type = Counter(entity_types).most_common(1)[0][0] if entity_types else None
+
+        entity_confidences = [r.get("entity_confidence") for r in c.queries if r.get("entity_confidence")]
+        avg_confidence = sum(entity_confidences) / len(entity_confidences) if entity_confidences else None
+
+        trend_dict = {
+            "trend": c.label,
+            "countries": c.countries,
+            "country_order": country_order,
+            "first_seen": first_seen,
+            "lead_lag": lead_lag,
+            "seed_count": len(c.seeds),
+            "seeds": c.seeds[:10],
+            "examples": examples,
+            "raw_count": len(c.queries),
+            "entity_type": entity_type,
+            "entity_confidence": round(avg_confidence, 2) if avg_confidence else None,
+        }
+
+        payload.append(trend_dict)
+
+    # Apply 5D scoring to all trends with history for velocity
+    scored_payload = scorer.score_batch(payload, history_map=history_map)
+
+    # Take top_n after scoring
+    scored_payload = scored_payload[:top_n]
 
     TRENDS_OUT.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2),
+        json.dumps(scored_payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
 

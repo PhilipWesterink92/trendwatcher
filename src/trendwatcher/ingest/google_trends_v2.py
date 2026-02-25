@@ -1,52 +1,23 @@
 """
-Google Trends v2 - Using interest_over_time instead of deprecated trending_searches API.
+Google Trends v2 - Multi-market intelligence with config-driven keywords.
 
-The trending_searches API endpoint has been deprecated by Google (404 errors).
-This version monitors specific food keywords and identifies which are trending up.
+Monitors specific food keywords across 9 markets to detect emerging trends.
+Keywords are now defined per-market in sources.yaml for better signal quality.
 """
 from __future__ import annotations
 
 import random
 import time
 from datetime import datetime, timezone
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from pytrends.request import TrendReq
 from rich import print
 
 
-# Food keywords to monitor for trends
-# These cover major food categories that typically trend
-FOOD_KEYWORDS = [
-    # Proteins
-    "chicken recipe", "salmon recipe", "tofu recipe", "beef recipe",
-
-    # Plant-based
-    "vegan", "plant based", "oat milk", "almond milk",
-
-    # Fermented
-    "kimchi", "kombucha", "sourdough", "miso",
-
-    # Asian
-    "ramen", "pho", "bao", "dumpling", "matcha",
-
-    # Middle Eastern
-    "tahini", "hummus", "falafel", "halloumi",
-
-    # Cooking methods
-    "air fryer", "instant pot", "slow cooker", "meal prep",
-
-    # Diets
-    "keto", "gluten free", "dairy free", "paleo",
-
-    # Trending ingredients
-    "avocado", "quinoa", "chia seeds", "acai", "tempeh",
-]
-
-
 def fetch_trending_keywords(
     country_code: str,
-    keywords: List[str] = None,
+    keywords: List[str],
     batch_size: int = 5,
     timeframe: str = 'today 1-m',
 ) -> List[Dict]:
@@ -55,15 +26,16 @@ def fetch_trending_keywords(
 
     Args:
         country_code: Country code (e.g., "US", "NL", "DE")
-        keywords: List of keywords to check (uses default if None)
+        keywords: List of keywords to check (required, from config)
         batch_size: Number of keywords per API call (max 5)
         timeframe: Time period to check ('today 1-m', 'today 3-m', etc.)
 
     Returns:
         List of dictionaries with trending keywords and scores
     """
-    if keywords is None:
-        keywords = FOOD_KEYWORDS
+    if not keywords:
+        print(f"[yellow]google_trends_v2[/yellow] {country_code}: no keywords provided, skipping")
+        return []
 
     cc = country_code.upper()
     results = []
@@ -125,17 +97,30 @@ def fetch_trending_keywords(
     return results
 
 
-def fetch_rising_searches(country_code: str) -> List[Dict]:
+def fetch_rising_searches(
+    country_code: str,
+    keywords: Optional[List[str]] = None
+) -> List[Dict]:
     """
-    Compatibility wrapper for existing code.
-    Uses keyword monitoring instead of deprecated trending_searches API.
+    Fetch trending searches for a specific market.
+
+    Args:
+        country_code: Country code (e.g., "US", "NL", "DE")
+        keywords: List of keywords to monitor (required)
+
+    Returns:
+        List of trending keyword data
     """
+    if not keywords:
+        print(f"[yellow]google_trends_v2[/yellow] {country_code}: no keywords provided, skipping")
+        return []
+
     results = fetch_trending_keywords(
         country_code=country_code,
-        keywords=FOOD_KEYWORDS,
+        keywords=keywords,
         batch_size=5,
         timeframe='today 1-m'
     )
 
-    print(f"[green]google_trends_v2[/green] {country_code}: found {len(results)} trending keywords")
+    print(f"[green]google_trends_v2[/green] {country_code}: found {len(results)} trending keywords from {len(keywords)} monitored")
     return results
