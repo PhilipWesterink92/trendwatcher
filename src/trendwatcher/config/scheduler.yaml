@@ -16,7 +16,7 @@ schedule:
   # Ingest: Fetch data from all sources
   # ====================================
   ingest:
-    enabled: true
+    enabled: false  # PAUSED - Re-enable when ready to resume
     cron: "0 2 * * *"  # Daily at 2:00 AM UTC
     # Fetches Google Trends, competitor pages, Reddit posts, and food blogs
 
@@ -24,7 +24,7 @@ schedule:
   # Extract: Cluster and score trends
   # ====================================
   extract:
-    enabled: true
+    enabled: false  # PAUSED - Re-enable when ready to resume
     cron: "0 3 * * *"  # Daily at 3:00 AM UTC (after ingest)
     # Processes raw documents into clustered trends
 
@@ -32,7 +32,7 @@ schedule:
   # Analyze: AI-powered trend analysis
   # ====================================
   analyze:
-    enabled: true
+    enabled: false  # PAUSED - Re-enable when ready to resume
     cron: "0 4 * * 0"  # Weekly on Sunday at 4:00 AM UTC
     top_n: 25          # Analyze top 25 trends
     # Uses Claude AI to evaluate product fit and market readiness
@@ -41,7 +41,7 @@ schedule:
   # Snapshot: Save weekly history (Phase 5)
   # ====================================
   snapshot:
-    enabled: true
+    enabled: false  # PAUSED - Re-enable when ready to resume
     cron: "0 7 * * 1"  # Weekly on Monday at 7:00 AM UTC
     # Saves weekly trend snapshot for WoW velocity tracking
 
@@ -49,7 +49,7 @@ schedule:
   # Report: Send Slack notifications
   # ====================================
   report:
-    enabled: true  # Slack configured and ready!
+    enabled: false  # PAUSED - Re-enable when ready to resume
     cron: "0 9 * * 1"  # Weekly on Monday at 9:00 AM UTC
     channel: "#food-trendwatcher"
     # Sends weekly trend report to Slack channel
