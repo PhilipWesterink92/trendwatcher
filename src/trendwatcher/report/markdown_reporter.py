@@ -234,9 +234,16 @@ def identify_fads(trends: List[Dict]) -> List[Dict]:
     Criteria:
     - Low specificity (< 2)
     - Recipe-only (contains "recipe" but no specific product)
-    - Single-market only
+    - Listicle content (best X, N ways to, etc.)
+    - Single-market only with low specificity
     """
     fads = []
+
+    # Content marketing patterns
+    listicle_patterns = [
+        "best", "top", "ways", "ideas", "tips", "guide",
+        "you need", "we made", "we love", "editors"
+    ]
 
     for trend in trends:
         specificity = trend.get("score_breakdown", {}).get("specificity", 0)
@@ -246,11 +253,15 @@ def identify_fads(trends: List[Dict]) -> List[Dict]:
 
         # Fad criteria
         is_recipe_only = "recipe" in trend_name and not entity_type
+        is_listicle = any(pattern in trend_name for pattern in listicle_patterns)
         low_specificity = specificity < 2.0
         single_market = len(countries) == 1
 
         if is_recipe_only:
-            trend["fad_reason"] = "Recipe fad, no new SKU"
+            trend["fad_reason"] = "Recipe collection, no actionable product"
+            fads.append(trend)
+        elif is_listicle:
+            trend["fad_reason"] = "Content headline, not product intelligence"
             fads.append(trend)
         elif low_specificity and single_market:
             trend["fad_reason"] = "Too generic, single market only"

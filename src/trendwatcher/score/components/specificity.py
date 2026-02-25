@@ -58,6 +58,14 @@ def score_specificity(trend: Dict) -> float:
     if re.search(r"\b[A-Z][a-z]+\b", trend.get("trend", "")):
         base_score += 1.0
 
+    # Listicle/content marketing patterns get heavy penalty
+    listicle_indicators = [
+        "best", "top", "ways", "ideas", "tips", "guide",
+        "you need", "we made", "editors", "everything"
+    ]
+    if any(indicator in trend_name for indicator in listicle_indicators):
+        base_score -= 2.0
+
     # Generic food terms get penalty
     generic_terms = {"recipe", "recipes", "food", "cooking", "dinner", "lunch"}
     if any(term in trend_name for term in generic_terms):

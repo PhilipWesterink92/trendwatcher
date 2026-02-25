@@ -245,16 +245,46 @@ GENERIC_VETO = {
     "appetizer",
 }
 
+# Listicle patterns that indicate non-actionable content
+LISTICLE_PATTERNS = [
+    r"^\d{2,}\s+",  # Starts with 2+ digit number: "31 desserts" (but not "15 bean" which is 15-bean soup)
+    r"\d+\s+(ways|recipes|ideas|tips|tricks|hacks|secrets|things|items)",
+    r"\s+ideas$",  # Ends with "ideas": "breakfast ideas", "egg ideas"
+    r"^best\s+",
+    r"^top\s+\d+",
+    r"^how to\s+",
+    r"^why\s+",
+    r"^what\s+",
+    r"^has\s+\w+\s+(changed|actually)",  # "has X changed", "has X actually"
+    r"^is\s+\w+\s+(still|really)",  # "is X still", "is X really"
+    r"^should\s+you",
+    r"the\s+best\s+",
+    r"the\s+\d{2,}\s+",  # "the 31 recipes"
+    r"you\s+need\s+to\s+(know|try|make)",
+    r"we\s+(made|love|tested|tried|published)",
+    r"our\s+editors",
+    r"editors?\s+(picks?|choice|favorite|make)",
+    r"guide\s+to",
+    r"everything\s+you\s+need",
+    r"that\s+(dont|doesn't|wont|won't)\s+taste",  # "desserts that don't taste like"
+    r"(more|and)\s+recipes\s+we",  # "more recipes we made"
+]
+
 
 def should_skip_generic(query: str) -> bool:
     """
-    Check if query is too generic (single common word).
+    Check if query is too generic or non-actionable.
+
+    Filters out:
+    - Single generic words
+    - Listicle headlines ("10 ways to...", "best X to buy")
+    - Content marketing phrases
 
     Args:
-        query: Search query
+        query: Search query or article title
 
     Returns:
-        True if should skip (too generic)
+        True if should skip (not actionable for procurement)
     """
     query_lower = query.lower().strip()
 
@@ -262,5 +292,10 @@ def should_skip_generic(query: str) -> bool:
     words = query_lower.split()
     if len(words) == 1 and words[0] in GENERIC_VETO:
         return True
+
+    # Check for listicle patterns (content marketing, not product signals)
+    for pattern in LISTICLE_PATTERNS:
+        if re.search(pattern, query_lower):
+            return True
 
     return False
